@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFC</title>
+
+  <style>
+    /* 场景一 */
+    .outer {
+      width: 200px;
+      border: 10px #333 solid;
+      /* 
+        float及display不推荐，父元素会丢失宽度等弊端，较推荐overflow
+      */
+      /* float: left; */
+      /* display: inline-block; */
+      overflow: hidden;
+    }
+    .inner {
+      width: 100px;
+      height: 100px;
+      background-color: #aff;
+      float: left;
+    }
+
+    /* 场景二 */
+    .box1, .box2 {
+      width: 100px;
+      height: 100px;
+    }
+    .box1 {
+      background-color: #aff;
+      float: left;
+    }
+    .box2 {
+      background-color: #333;
+      /* float: left; */
+      /* display: inline-block; */
+      overflow: hidden;
+    }
+
+    /* 场景三 */
+    .father {
+      width: 200px;
+      height: 200px;
+      background-color: #333;
+      /* float: left; */
+      /* display: inline-block; */
+      overflow: hidden;
+    }
+    .son {
+      width: 100px;
+      height: 100px;
+      background-color: #aff;
+      margin-top: 50px;
+    }
+
+    /* clear同时解决高度塌陷以及外边距折叠问题 */
+    .outer1 {
+      width: 200px;
+      background-color: #aff;
+    }
+    .inner1 {
+      width: 100px;
+      height: 100px;
+      background-color: #333;
+      margin-top: 100px;
+      float: left;
+    }
+
+    /* clearfix类既可以解决高度塌陷也可以解决外边距折叠，由《css权威指南》作者所设计 */
+    .clearfix::before,
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+  <h1>一、BFC(Block Formatting Context)：块级格式化上下文</h1>
+  <p>BFC是CSS中的一个布局概念，是一个独立的渲染区域，规定了内部box如何布局，且这个区域内的子元素不会影响到外面的元素</p>
+  <dl>
+    <dt>创建规则</dt>
+    <dd>根元素</dd>
+    <dd>浮动元素（float不取值为none）</dd>
+    <dd>position 值为 absolute 或 fixed</dd>
+    <dd>display取值为inline-block、table-cell、table-caption、flex、inline-flex</dd>
+    <dd>overflow值不为visible的元素</dd>
+  </dl>
+  <dl>
+    <dt>作用</dt>
+    <dd>解决高度塌陷问题</dd>
+    <dd>不被浮动元素覆盖</dd>
+    <dd>防止父子元素外边距折叠</dd>
+  </dl>
+
+  <hr>
+
+  <h2>BFC场景一：子元素浮动，父元素高度塌陷</h2>
+  <div class="outer">
+    <div class="inner">浮动元素</div>
+  </div>
+
+  <hr>
+
+  <h2>BFC场景二：同级浮动元素覆盖未浮动元素</h2>
+  <div class="box1">浮动元素</div>
+  <div class="box2"></div>
+
+  <hr>
+
+  <h2>BFC场景三：父子元素外边距折叠</h2>
+  <div class="father">
+    <div class="son"></div>
+  </div>
+
+  <hr>
+
+  <h1>二、clearfix的设计</h1>
+  <p>clearfix类既可以解决高度塌陷也可以解决外边距折叠，由《css权威指南》作者所设计</p>
+  <div class="outer1 clearfix">
+    <div class="inner1"></div>
+  </div>
+</body>
+</html>
